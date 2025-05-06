@@ -1,7 +1,7 @@
 [project]
-name = "stonks"
+name = "my-data-platform"
 version = "0.1.0"
-description = ""
+description = "A data platform built with modern data engineering tools, just for fun."
 authors = [
     {name = "Marco Di Spirito",email = "marco.n.dispirito@gmail.com"}
 ]
