@@ -1,2 +1,2 @@
-# stonks
-A fun project for me to learn how to apply modern data engineering tools to the world of quantitative finance.
+# My Data Platform
+A data platform built with modern data engineering tools, just for fun.
