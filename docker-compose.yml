@@ -1,9 +1,54 @@
 services:
   app:
     build: .
-    container_name: my-data-platform-server
+    container_name: data-platform-app
     command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
     ports:
       - 80:80
     volumes:
       - .:/code
+
+  # core:
+  #   build: .
+  #   container_name: data-platform-core
+  #   command: python src/core/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+
+  # orchestration:
+  #   build: .
+  #   container_name: data-platform-orchestration
+  #   command: python src/orchestration/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # ingestion:
+  #   build: .
+  #   container_name: data-platform-ingestion
+  #   command: python src/ingestion/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # transformation:
+  #   build: .
+  #   container_name: data-platform-transformation
+  #   command: python src/transformation/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # analytics:
+  #   build: .
+  #   container_name: data-platform-analytics
+  #   command: python src/analytics/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
