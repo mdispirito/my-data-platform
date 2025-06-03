@@ -1,12 +1,40 @@
+name: data-platform
+
 services:
   app:
-    build: .
+    build: ./app
     container_name: data-platform-app
-    command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
     ports:
       - 80:80
     volumes:
-      - .:/code
+      - ./:/app
+    # depends_on:
+    #   - localstack
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
+  cdk:
+    build: ./cdk
+    container_name: data-platform-infra
+    volumes:
+      - ./:/cdk
+  
+  # localstack:
+  #   container_name: data-platform-localstack
+  #   image: localstack/localstack:latest
+  #   ports:
+  #     - "4566:4566"
+  #   environment:
+  #     - SERVICES=s3,iam
+  #     - DEBUG=1
+  #     - DATA_DIR=/tmp/localstack/data
+  #     - DOCKER_HOST=unix:///var/run/docker.sock
+  #   volumes:
+  #     - "/tmp/localstack:/tmp/localstack"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
 
   # core:
   #   build: .
