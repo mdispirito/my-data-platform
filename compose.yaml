@@ -1,0 +1,79 @@
+name: data-platform
+
+services:
+  app:
+    build: ./app
+    container_name: data-platform-app
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/app
+    depends_on:
+      - localstack
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
+  
+  localstack:
+    container_name: localstack-container
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      - services=s3
+      - DEBUG=${DEBUG:-0}
+      - AWS_DEFAULT_REGION=ca-west-1
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket data-platform-local-test-bucket
+
+# services below are just placeholders for now
+
+  # core:
+  #   build: .
+  #   container_name: data-platform-core
+  #   command: python src/core/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+
+  # orchestration:
+  #   build: .
+  #   container_name: data-platform-orchestration
+  #   command: python src/orchestration/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # ingestion:
+  #   build: .
+  #   container_name: data-platform-ingestion
+  #   command: python src/ingestion/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # transformation:
+  #   build: .
+  #   container_name: data-platform-transformation
+  #   command: python src/transformation/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app
+  
+  # analytics:
+  #   build: .
+  #   container_name: data-platform-analytics
+  #   command: python src/analytics/main.py
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - app

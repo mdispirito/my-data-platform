@@ -1,9 +1,0 @@
-services:
-  app:
-    build: .
-    container_name: my-data-platform-server
-    command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
-    ports:
-      - 80:80
-    volumes:
-      - .:/code
