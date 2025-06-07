@@ -7,34 +7,31 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./:/app
-    # depends_on:
-    #   - localstack
+      - ./app:/app
+    depends_on:
+      - localstack
     environment:
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_DEFAULT_REGION=us-east-1
     command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
-  cdk:
-    build: ./cdk
-    container_name: data-platform-infra
-    volumes:
-      - ./:/cdk
   
-  # localstack:
-  #   container_name: data-platform-localstack
-  #   image: localstack/localstack:latest
-  #   ports:
-  #     - "4566:4566"
-  #   environment:
-  #     - SERVICES=s3,iam
-  #     - DEBUG=1
-  #     - DATA_DIR=/tmp/localstack/data
-  #     - DOCKER_HOST=unix:///var/run/docker.sock
-  #   volumes:
-  #     - "/tmp/localstack:/tmp/localstack"
-  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  localstack:
+    container_name: localstack-container
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      - services=s3
+      - DEBUG=${DEBUG:-0}
+      - AWS_DEFAULT_REGION=ca-west-1
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket data-platform-local-test-bucket
+
+# services below are just placeholders for now
 
   # core:
   #   build: .
