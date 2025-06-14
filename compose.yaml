@@ -14,11 +14,11 @@ services:
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
-      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_DEFAULT_REGION=ca-west-1
     command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
 
   localstack:
-    container_name: localstack-container
+    container_name: localstack
     image: localstack/localstack:latest
     ports:
       - "127.0.0.1:4566:4566"
@@ -29,7 +29,10 @@ services:
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-    command: aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket data-platform-local-test-bucket
+      # The below is an initialization hook that runs when the localstack service is ready.
+      # https://docs.localstack.cloud/references/init-hooks/
+      # I'll hook into the ready stage to create my s3 bucket for now.
+      - ./aws:/etc/localstack/init/ready.d
 
 # services below are just placeholders for now
 
