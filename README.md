@@ -9,11 +9,13 @@ I think sports are fun, so I'm going to focus on sports datasets to begin with. 
 A little disclaimer: The purpose of the project is simply to learn and have fun with all the all of the modern data engineering tools and technologies that are out there. As a result, it may not always apply the "right tool for the job" (for example, using Spark to process a relatively small dataset). However for each component, I will note the practical tradeoffs and considerations I would take into account in a production setting.
 
 ## Project status
-There isn't much here yet, as I'm just doing some general setup.
+Still working on general setup...
 
 To start with, I'm fetching some simple NBA data to begin playing with. I'll probably add/join other datasets in the future.
 
-I'm using localstack to write it to a local S3 bucket for now. In the future I'll deploy to AWS using Terraform and create a persistent version of the platform.
+I'm using localstack to write it to a local S3 bucket for now. I'm in the process of building a really simple frontend to interact with the platform through the browser.
+
+In the future I'll deploy to AWS using Terraform and create a persistent version of the platform.
 
 # Usage
 The application is completely containerized and split into services, as outlined in `compose.yaml`.
@@ -38,7 +40,8 @@ This is a really rough outline of what I'm planning on doing. It'll almost defin
 
 Sample data collection
 - [x] Set up nba_api and start pulling some data and writing to the console
-- [ ] Set up a localstack S3 environment with Docker
+- [x] Set up a localstack S3 environment with Docker
+- [ ] Add a simple frontend to interact with the platform in the browser
 
 Ingestion
 - [ ] Hook the data ingestion up to the local s3 bucket

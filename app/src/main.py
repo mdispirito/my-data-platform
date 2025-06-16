@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 from src.data import fetch_nba_teams
 from src.aws.s3 import write_to_s3
@@ -13,6 +15,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 app = FastAPI()
+templates = Jinja2Templates(directory="src/templates")
 
 s3_client = boto3.client(
     's3',
@@ -24,9 +27,16 @@ s3_client = boto3.client(
 
 BUCKET_NAME = "data-platform-local-test-bucket"
 
-@app.get("/")
-async def read_root():
-    return {"message": "Welcome to the beginnings of my general data platform..."}
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    print('HERE!')
+    print(os.getcwd())
+    files = await list_s3_files()
+
+    return templates.TemplateResponse("home.html", {
+        "request": request,
+        "files": files
+    })
 
 @app.get("/nba-data")
 async def get_nba_data():
