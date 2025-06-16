@@ -30,8 +30,7 @@ services:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       # The below is an initialization hook that runs when the localstack service is ready.
-      # https://docs.localstack.cloud/references/init-hooks/
-      # I'll hook into the ready stage to create my s3 bucket for now.
+      # See ./aws/localstack.md
       - ./aws:/etc/localstack/init/ready.d
 
 # services below are just placeholders for now
